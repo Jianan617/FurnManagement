@@ -1,0 +1,70 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--主要配置和业务逻辑有关的，如数据源，事务控制等-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+
+  <!--ContextLoaderListener监听器
+    1. 启动web容器时，自动装配applicationContext地配置信息
+    2. 它实现了ServletContextListener接口，在web.xml配置该监听器，启动容器时，会默认执行他实现的方法
+    3. 默认读取名为contextConfigLocation-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+
+  <!--配置前端控制器-->
+  <!--因为没有指定springmvc的配置文件，默认按照servlet-name-servlet.xml的名称来获取-->
+  <servlet>
+    <servlet-name>springDispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springDispatcherServlet</servlet-name>
+    <!--所有用户的请求都经过该前端控制器-->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--Spring提供的过滤器处理中文-->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+    <init-param>
+      <!--表示该过滤器会执行request.setCharacterEncoding(encoding);-->
+      <param-name>forceRequestEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <!--表示该过滤器会执行response.setCharacterEncoding(encoding);-->
+      <param-name>forceResponseEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--配置HiddenHttpMethodFilter，支持RESTful风格，可以把post请求转换为delete或put请求-->
+  <filter>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <!--/*表示任何请求都经过hiddenHttpMethodFilter过滤-->
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+</web-app>

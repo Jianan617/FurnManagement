@@ -1,0 +1,17 @@
+# Java / Maven
+MySSM/target/
+*.class
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Vue / Node
+myssm_vue/node_modules/
+myssm_vue/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
